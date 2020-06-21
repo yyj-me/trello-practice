@@ -1,18 +1,27 @@
 # trello-practice
 
-> A Vue.js project
+> 인프런 트렐로 개발로 배우는 Vuejs 샘플 코드 연습 프로젝트
 
-## Build Setup
+기능 목록
 
-``` bash
-# install dependencies
-npm install
+- 인증 : 로그인, 로그아웃
+- 보드 : 생성, 조회, 수정(타이틀, 색상), 삭제
+- 리스트 : 생성, 수정(타이틀), 이동, 삭제
+- 카드 : 생성, 조회, 수정(타이틀, 설명), 이동, 삭제
 
-# serve with hot reload at localhost:8080
-npm run dev
+기본 플로우
 
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- 홈페이지 접속 : 비인가 요청은 로그인 페이지 이동
+- 로그인 페이지 : 로그인 수행
+- 홈페이지 리다이렉트
+- 보드 목록 조회
+- 보드 생성 : 보드 생성 후 생성한 보드 화면 이동
+- 보드 조회 : 자동 생성 리스트 (Todo, Doing, Done)
+- 카드 생성 : 타이틀 입력
+- 카드 상세 조회 : 모달
+- 카드 수정 : 타이틀, 설명
+- 카드 이동 : 리스트 내 이동
+- 카드 이동 : 리스트 간 이동
+- 카드 삭제
+- 보드 세팅 : 사이드바
+- 보드 삭제 : 보드 삭제 후 홈 페이지 이동
