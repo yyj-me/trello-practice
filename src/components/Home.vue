@@ -5,7 +5,8 @@
       Board List:
       <div v-if="loading">Loading...</div>
       <div v-else>
-        Api result: {{apiRes}}
+        Api result: <pre>{{apiRes}}</pre>
+        <div v-if="error"><pre>{{error}}</pre></div>
       </div>
       <ul>
         <li>
@@ -20,12 +21,15 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   export default {
     name: "Home.vue",
     data() {
       return {
         loading: false,
         apiRes: '',
+        error: '',
       };
     },
     created() {
@@ -35,18 +39,16 @@
       fetchData() {
         this.loading = true;
 
-        const req = new XMLHttpRequest();
-        req.open('GET', 'http://localhost:3000/health');
-        req.send();
-
-        req.addEventListener('load', () => {
+        axios.get('http://localhost:3000/health1')
+        .then(res => {
+          this.apiRes = res.data;
+        })
+        .catch(res => {
+          this.error = res.response.data;
+        })
+        .finally(() => {
           this.loading = false;
-          this.apiRes = {
-            status: req.status,
-            statusText: req.statusText,
-            response: JSON.parse(req.response),
-          };
-        });
+        })
       }
     }
   }
