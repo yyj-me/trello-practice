@@ -15,8 +15,8 @@ const request = (method, url, data) => {
   }).then(res => res.data)
     .catch(({response}) => {
       const {status} = response;
-      if (status === UNAUTHORIZED) return onUnauthorized();
-      throw Error(response);
+      if (status === UNAUTHORIZED) onUnauthorized();
+      throw response;
     })
 };
 
