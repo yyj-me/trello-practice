@@ -12,7 +12,7 @@ const request = (method, url, data) => {
     method,
     url: DOMAIN + url,
     data,
-  }).then(res => res.data)
+  }).then(({data}) => data)
     .catch(({response}) => {
       const {status} = response;
       if (status === UNAUTHORIZED) onUnauthorized();
@@ -28,6 +28,9 @@ export const Board = {
   fetch() {
     return request('get', '/boards');
   },
+  create(title) {
+    return request('post', '/boards', {title});
+  }
 };
 
 export const Auth = {

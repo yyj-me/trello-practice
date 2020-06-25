@@ -8,24 +8,29 @@
         </router-link>
       </div>
       <div class="board-item">
-        <a class="new-board-btn" href="" @click.prevent="addBoard">
+        <a class="new-board-btn" href="" @click.prevent="showAddBoard">
           Create new board...
         </a>
       </div>
     </div>
+    <AddBoard v-if="isAddBoard" @close="closeAddBoard" @submit="onAddBoard"/>
   </div>
 </template>
 
 <script>
   import { Board } from '../api';
+  import Modal from './Modal';
+  import AddBoard from './AddBoard';
 
   export default {
     name: "Home.vue",
+    components: {Modal, AddBoard},
     data() {
       return {
         loading: false,
         boards: [],
         error: '',
+        isAddBoard: false,
       };
     },
     created() {
@@ -40,21 +45,28 @@
       fetchData() {
         this.loading = true;
         Board.fetch()
-        .then(res => {
-          this.boards = res.data;
+        .then(data => {
+          this.boards = data.list;
         })
         .finally(() => {
           this.loading = false;
         })
       },
-      addBoard() {
-        console.log('addBoard');
+      showAddBoard() {
+        this.isAddBoard = true;
+      },
+      closeAddBoard() {
+        this.isAddBoard = false;
+      },
+      onAddBoard(title) {
+        Board.create(title)
+        .then(() => this.fetchData())
       }
     }
   }
 </script>
 
-<style scoped>
+<style>
   .home-title {
     padding: 10px;
     font-size: 18px;
