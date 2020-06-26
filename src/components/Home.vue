@@ -8,12 +8,12 @@
         </router-link>
       </div>
       <div class="board-item">
-        <a class="new-board-btn" href="" @click.prevent="showAddBoard">
+        <a class="new-board-btn" href="" @click.prevent="SET_IS_SHOW_ADD_BOARD(true)">
           Create new board...
         </a>
       </div>
     </div>
-    <AddBoard v-if="isAddBoard" @close="closeAddBoard" @submit="onAddBoard"/>
+    <AddBoard v-if="isShowAddBoard" @close="closeAddBoard" @submit="onAddBoard"/>
   </div>
 </template>
 
@@ -21,6 +21,7 @@
   import { Board } from '../api';
   import Modal from './Modal';
   import AddBoard from './AddBoard';
+  import {mapMutations, mapState} from 'vuex';
 
   export default {
     name: "Home.vue",
@@ -30,7 +31,6 @@
         loading: false,
         boards: [],
         error: '',
-        isAddBoard: false,
       };
     },
     created() {
@@ -41,7 +41,15 @@
         el.style.backgroundColor = el.dataset.bgcolor;
       })
     },
+    computed: {
+      ...mapState([
+        'isShowAddBoard',
+      ]),
+    },
     methods: {
+      ...mapMutations([
+        'SET_IS_SHOW_ADD_BOARD',
+      ]),
       fetchData() {
         this.loading = true;
         Board.fetch()
@@ -52,15 +60,8 @@
           this.loading = false;
         })
       },
-      showAddBoard() {
-        this.isAddBoard = true;
-      },
-      closeAddBoard() {
-        this.isAddBoard = false;
-      },
-      onAddBoard(title) {
-        Board.create(title)
-        .then(() => this.fetchData())
+      onAddBoard() {
+        this.fetchData();
       }
     }
   }
