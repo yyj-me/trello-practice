@@ -47,11 +47,12 @@
       ]),
       ...mapActions([
         'ADD_BOARD',
+        'FETCH_BOARDS',
       ]),
       addBoard() {
         this.SET_IS_SHOW_ADD_BOARD(false);
         this.ADD_BOARD({title: this.input});
-        this.$emit('submit');
+        this.FETCH_BOARDS();
       },
     }
   }

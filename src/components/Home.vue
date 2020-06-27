@@ -13,15 +13,14 @@
         </a>
       </div>
     </div>
-    <AddBoard v-if="isShowAddBoard" @close="closeAddBoard" @submit="onAddBoard"/>
+    <AddBoard v-if="isShowAddBoard"/>
   </div>
 </template>
 
 <script>
-  import { Board } from '../api';
   import Modal from './Modal';
   import AddBoard from './AddBoard';
-  import {mapMutations, mapState} from 'vuex';
+  import {mapActions, mapMutations, mapState} from 'vuex';
 
   export default {
     name: "Home.vue",
@@ -29,7 +28,6 @@
     data() {
       return {
         loading: false,
-        boards: [],
         error: '',
       };
     },
@@ -44,25 +42,23 @@
     computed: {
       ...mapState([
         'isShowAddBoard',
+        'boards',
       ]),
     },
     methods: {
       ...mapMutations([
         'SET_IS_SHOW_ADD_BOARD',
       ]),
+      ...mapActions([
+        'FETCH_BOARDS',
+      ]),
       fetchData() {
         this.loading = true;
-        Board.fetch()
-        .then(data => {
-          this.boards = data.list;
-        })
+        this.FETCH_BOARDS()
         .finally(() => {
           this.loading = false;
         })
       },
-      onAddBoard() {
-        this.fetchData();
-      }
     }
   }
 </script>
