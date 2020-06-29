@@ -4,27 +4,28 @@
       <router-link to="/">Home</router-link>
     </div>
     <div class="header-auth">
-      <a v-if="isAuthenticated" href="" @click.prevent="logout">Logout</a>
+      <a v-if="isAuth" href="" @click.prevent="logout">Logout</a>
       <router-link v-else to="/login">Login</router-link>
     </div>
   </nav>
 </template>
 
 <script>
-  import {setAuthInHeader} from '../api';
+  import {mapGetters, mapMutations} from "vuex";
 
   export default {
     name: "Navbar",
     computed: {
-      isAuthenticated() {
-        console.log('isAuthenticated', localStorage.getItem('token'), !!localStorage.getItem('token'))
-        return !!localStorage.getItem('token');
-      }
+      ...mapGetters([
+        'isAuth',
+      ]),
     },
     methods: {
+      ...mapMutations([
+        'LOGOUT',
+      ]),
       logout() {
-        delete localStorage.token;
-        setAuthInHeader(null);
+        this.LOGOUT();
         this.$router.push('/login');
       },
     }
