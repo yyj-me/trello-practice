@@ -6,10 +6,11 @@
     </div>
     <div v-else>
       <div>bid: {{bid}}</div>
+      <pre>{{board}}</pre>
       <router-link :to="`/b/${bid}/c/1`">Card 1</router-link>
       <router-link :to="`/b/${bid}/c/2`">Card 2</router-link>
     </div>
-    <hr />
+    <hr/>
     <router-view></router-view>
   </div>
 
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+  import {mapActions, mapState} from "vuex";
+
   export default {
     name: "Board",
     data() {
@@ -28,13 +31,19 @@
     created() {
       this.fetchData();
     },
+    computed: {
+      ...mapState([
+        'board',
+      ]),
+    },
     methods: {
+      ...mapActions([
+        'FETCH_BOARD',
+      ]),
       fetchData() {
         this.loading = true;
-        setTimeout(() => {
-          this.bid = this.$route.params.bid;
-          this.loading = false;
-        }, 500);
+        this.FETCH_BOARD({id: this.$route.params.bid})
+          .then(() => this.loading = false);
       }
     }
   }

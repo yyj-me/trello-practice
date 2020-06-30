@@ -47,12 +47,11 @@
       ]),
       ...mapActions([
         'ADD_BOARD',
-        'FETCH_BOARDS',
       ]),
       addBoard() {
         this.SET_IS_SHOW_ADD_BOARD(false);
-        this.ADD_BOARD({title: this.input});
-        this.FETCH_BOARDS();
+        this.ADD_BOARD({title: this.input})
+        .then(({id}) => this.$router.push(`/b/${id}`));
       },
     }
   }
