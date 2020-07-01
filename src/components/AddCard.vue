@@ -9,8 +9,11 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
+
 export default {
   name: 'AddCard',
+  props: ['listId'],
   data() {
     return {
       inputCardTitle: '',
@@ -26,11 +29,22 @@ export default {
     this.setupClickOutside(this.$el);
   },
   methods: {
+    ...mapActions([
+      'ADD_CARD',
+    ]),
     cancelAdding() {
       this.$emit('close');
     },
     onSubmit() {
-      console.log('submit');
+      if (this.invalidInput) return;
+
+      const {inputCardTitle, listId} = this;
+
+      this.ADD_CARD({title: inputCardTitle, listId})
+        .finally(() => {
+          this.inputTitle = '';
+          this.$emit('close');
+        });
     },
     setupClickOutside(el) {
       document.querySelector('body').addEventListener('click', e => {

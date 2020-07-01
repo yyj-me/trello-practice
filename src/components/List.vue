@@ -5,8 +5,11 @@
         {{data.title}}
       </div>
     </div>
+    <div class="card-list">
+      <card-item v-for="card in data.cards" :key="card.id" :card="card"/>
+    </div>
     <div v-if="isAddCard">
-      <add-card @close="hideAddCard"></add-card>
+      <add-card :listId="data.id" @close="hideAddCard"></add-card>
     </div>
     <div v-else>
       <a class="add-card-btn" href="" @click.prevent.stop="showAddCard">
@@ -18,10 +21,11 @@
 
 <script>
 import addCard from './AddCard';
+import CardItem from "./CardItem";
 
 export default {
   name: 'List',
-  components: {addCard},
+  components: {CardItem, addCard},
   props: ['data'],
   data() {
     return {
