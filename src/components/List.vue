@@ -5,12 +5,37 @@
         {{data.title}}
       </div>
     </div>
+    <div v-if="isAddCard">
+      <add-card @close="hideAddCard"></add-card>
+    </div>
+    <div v-else>
+      <a class="add-card-btn" href="" @click.prevent.stop="showAddCard">
+        &plus; Add a card
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
+import addCard from './AddCard';
+
 export default {
+  name: 'List',
+  components: {addCard},
   props: ['data'],
+  data() {
+    return {
+      isAddCard: false,
+    }
+  },
+  methods: {
+    showAddCard() {
+      this.isAddCard = true;
+    },
+    hideAddCard() {
+      this.isAddCard = false;
+    },
+  },
 }
 </script>
 
