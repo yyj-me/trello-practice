@@ -43,4 +43,7 @@ export const Card = {
   create(title, listId, pos) {
     return request('post', '/cards', {title, listId, pos})
   },
+  fetch(id) {
+    return request('get', `/cards/${id}`);
+  },
 };

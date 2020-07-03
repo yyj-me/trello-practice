@@ -3,6 +3,7 @@ const state = {
   isShowAddBoard: false,
   boards: [],
   board: {},
+  card: {},
 };
 
 export default state;

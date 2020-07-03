@@ -1,15 +1,24 @@
 <template>
   <div class="card-item">
-    <div>{{card.title}}</div>
-    <div class="card-item-meta" v-if="card.description">&equiv;</div>
+    <router-link :to="`/b/${boardId}/c/${card.id}`">
+      <div>{{card.title}}</div>
+      <div class="card-item-meta" v-if="card.description">&equiv;</div>
+    </router-link>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: [
     'card',
   ],
+  computed: {
+    ...mapState({
+      boardId: state => state.board.id,
+    }),
+  },
   methods: {
   }
 }
