@@ -21,8 +21,7 @@
 <script>
   import {mapActions, mapState} from "vuex";
   import list from './List';
-  import dragula from 'dragula';
-  import 'dragula/dist/dragula.css';
+  import dragger from '../utils/dragger';
 
   export default {
     name: "Board",
@@ -31,7 +30,7 @@
       return {
         bid: 0,
         loading: false,
-        dragulaCards: null,
+        cDragger: null,
       };
     },
     computed: {
@@ -43,42 +42,8 @@
       this.fetchData();
     },
     updated() {
-      if (this.dragulaCards) this.dragulaCards.destroy();
+      this.setCardDraggable();
 
-      this.dragulaCards = dragula([
-        ...Array.from(this.$el.querySelectorAll('.card-list')),
-      ]).on('drop', (el, wrapper, target, siblings) => {
-        const targetCard = {
-          id: Number(el.dataset.cardId),
-          pos: 65535,
-        };
-        let prevCard = null;
-        let nextCard = null;
-        Array.from(wrapper.querySelectorAll('.card-item'))
-        .forEach((el, idx, arr) => {
-          const cardId = Number(el.dataset.cardId);
-          if (cardId === targetCard.id) {
-            prevCard = idx > 0 ? {
-              id: Number(arr[idx - 1].dataset.cardId),
-              pos: Number(arr[idx - 1].dataset.cardPos),
-            } : null;
-            nextCard = idx < arr.length - 1 ? {
-              id: Number(arr[idx + 1].dataset.cardId),
-              pos: Number(arr[idx + 1].dataset.cardPos),
-            } : null;
-          }
-        })
-
-        if (!prevCard && nextCard) {
-          targetCard.pos = nextCard.pos / 2;
-        } else if (prevCard && !nextCard) {
-          targetCard.pos = prevCard.pos * 2;
-        } else if (prevCard && nextCard) {
-          targetCard.pos = (prevCard.pos + nextCard.pos) / 2;
-        }
-        console.log(targetCard);
-        this.UPDATE_CARD(targetCard);
-      });
     },
     methods: {
       ...mapActions([
@@ -89,7 +54,34 @@
         this.loading = true;
         this.FETCH_BOARD({id: this.$route.params.bid})
           .then(() => this.loading = false);
-      }
+      },
+      setCardDraggable() {
+        if (this.cDragger) this.cDragger.destroy();
+        this.cDragger = dragger.init(Array.from(this.$el.querySelectorAll('.card-list')));
+
+        this.cDragger.on('drop', (el, wrapper, target, siblings) => {
+          const targetCard = {
+            id: Number(el.dataset.cardId),
+            pos: 65535,
+          };
+
+          const {prev, next} = dragger.siblings({
+            el,
+            wrapper,
+            candidates: Array.from(this.$el.querySelectorAll('.card-item')),
+            type: 'card',
+          });
+
+          if (!prev && next) {
+            targetCard.pos = next.pos / 2;
+          } else if (prev && !next) {
+            targetCard.pos = prev.pos * 2;
+          } else if (prev && next) {
+            targetCard.pos = (prev.pos + next.pos) / 2;
+          }
+          this.UPDATE_CARD(targetCard);
+        });
+      },
     }
   }
 </script>
