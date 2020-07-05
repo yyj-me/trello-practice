@@ -39,12 +39,21 @@ export default {
       if (this.invalidInput) return;
 
       const {inputCardTitle, listId} = this;
+      const pos = this.newCardPos();
 
-      this.ADD_CARD({title: inputCardTitle, listId})
+      this.ADD_CARD({title: inputCardTitle, pos, listId})
         .finally(() => {
           this.inputTitle = '';
           this.$emit('close');
         });
+    },
+    newCardPos() {
+      const cardList = this.$store.state.board.lists.filter(l => l.id === this.listId)[0];
+
+      if (!cardList) return 65535;
+      const {cards} = cardList;
+      if (!cards.length) return 65535;
+      return cards[cards.length - 1].pos * 2;
     },
     setupClickOutside(el) {
       document.querySelector('body').addEventListener('click', e => {
