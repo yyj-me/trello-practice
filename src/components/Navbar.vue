@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations} from "vuex";
+  import {mapGetters, mapMutations, mapState} from "vuex";
 
   export default {
     name: "Navbar",
@@ -19,6 +19,16 @@
       ...mapGetters([
         'isAuth',
       ]),
+      ...mapState({
+        navbarColor: 'navbarColor',
+        bodyColor: 'bodyColor',
+      }),
+    },
+    mounted() {
+      this.updateTheme();
+    },
+    watch: {
+      'bodyColor': 'updateTheme',
     },
     methods: {
       ...mapMutations([
@@ -27,6 +37,14 @@
       logout() {
         this.LOGOUT();
         this.$router.push('/login');
+      },
+      updateTheme() {
+        this.$el.style.backgroundColor = this.navbarColor;
+
+        const container = document.querySelector('.container');
+        if (container) container.style.backgroundColor = this.bodyColor;
+        const body = document.querySelector('body');
+        if (body) body.style.backgroundColor = this.bodyColor;
       },
     }
   }
