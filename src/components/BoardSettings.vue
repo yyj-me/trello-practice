@@ -5,9 +5,14 @@
       <a class="header-close-btn" href="" @click.prevent="onClickClose">&times;</a>
     </div>
     <ul class="menu-list">
-      <li>
-        <a href="" @click.prevent="onDeleteBoard">Delete Board</a>
-      </li>
+      <li><a href="" @click.prevent="onDeleteBoard">Delete Board</a></li>
+      <li>Change Background</li>
+      <div class="color-picker">
+        <a href="" data-value="rgb(0, 121, 191)" @click.prevent="onChangeTheme"/>
+        <a href="" data-value="rgb(210, 144, 52)" @click.prevent="onChangeTheme"/>
+        <a href="" data-value="rgb(81, 151,  57)" @click.prevent="onChangeTheme"/>
+        <a href="" data-value="rgb(176, 70, 50)" @click.prevent="onChangeTheme"/>
+      </div>
     </ul>
   </div>
 </template>
@@ -15,17 +20,26 @@
 <script>
 import {mapActions, mapMutations, mapState} from 'vuex'
 export default {
+
   computed: {
     ...mapState({
      board: 'board',
     }),
   },
+  mounted() {
+    Array.from(this.$el.querySelectorAll('.color-picker a'))
+      .forEach(el => {
+        el.style.backgroundColor = el.dataset.value;
+      })
+  },
   methods: {
     ...mapMutations([
       'SET_IS_SHOW_BOARD_MENU',
+      'SET_THEME',
     ]),
     ...mapActions([
       'DELETE_BOARD',
+      'UPDATE_BOARD',
     ]),
     onClickClose() {
       this.SET_IS_SHOW_BOARD_MENU(false)
@@ -35,7 +49,15 @@ export default {
       this.DELETE_BOARD(this.board.id)
       .then(() => this.SET_IS_SHOW_BOARD_MENU(false))
       .then(() => this.$router.push('/'));
-    }
+    },
+    onChangeTheme(e) {
+      const bgColor = e.target.dataset.value;
+      const id = this.board.id;
+      this.UPDATE_BOARD({id, bgColor})
+      .then(() => {
+        this.SET_THEME(bgColor);
+      });
+    },
   }
 }
 </script>
