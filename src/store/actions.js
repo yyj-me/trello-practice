@@ -18,6 +18,9 @@ const actions = {
       commit('SET_BOARD', data.item);
     })
   },
+  DELETE_BOARD(_, id) {
+    return Board.destroy(id);
+  },
   ADD_CARD({dispatch, state}, {title, listId, pos}) {
     return Card.create(title, listId, pos)
       .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));

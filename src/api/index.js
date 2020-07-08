@@ -30,7 +30,10 @@ export const Board = {
   },
   create(title) {
     return request('post', '/boards', {title});
-  }
+  },
+  destroy(id) {
+    return request('delete', `/boards/${id}`);
+  },
 };
 
 export const Auth = {
