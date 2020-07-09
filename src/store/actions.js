@@ -33,6 +33,10 @@ const actions = {
     return List.create({title, boardId, pos})
       .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
   },
+  UPDATE_LIST({dispatch, state}, {id, title, pos}) {
+    return List.update(id, {title, pos})
+      .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
+  },
   FETCH_CARD({commit}, {id}) {
     return Card.fetch(id)
       .then(data => {
