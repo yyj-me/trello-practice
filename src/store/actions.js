@@ -1,4 +1,4 @@
-import {Auth, Board, Card} from "../api";
+import {Auth, Board, Card, List} from "../api";
 
 const actions = {
   LOGIN({commit}, {email, password}) {
@@ -27,6 +27,10 @@ const actions = {
   },
   ADD_CARD({dispatch, state}, {title, listId, pos}) {
     return Card.create(title, listId, pos)
+      .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
+  },
+  ADD_LIST({dispatch, state}, {title, boardId, pos}) {
+    return List.create({title, boardId, pos})
       .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
   },
   FETCH_CARD({commit}, {id}) {

@@ -45,6 +45,12 @@ export const Auth = {
   },
 };
 
+export const List = {
+  create(payload) {
+    return request('post', '/lists', payload);
+  },
+};
+
 export const Card = {
   create(title, listId, pos) {
     return request('post', '/cards', {title, listId, pos})

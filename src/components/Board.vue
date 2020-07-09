@@ -14,6 +14,9 @@
             <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
               <list :data="list"/>
             </div>
+            <div class="list-wrapper">
+              <add-list/>
+            </div>
           </div>
         </div>
       </div>
@@ -28,10 +31,11 @@
   import list from './List';
   import dragger from '../utils/dragger';
   import BoardSettings from './BoardSettings';
+  import AddList from './AddList';
 
   export default {
     name: "Board",
-    components: {BoardSettings, list},
+    components: {AddList, BoardSettings, list},
     data() {
       return {
         bid: 0,
