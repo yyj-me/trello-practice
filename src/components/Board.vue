@@ -12,7 +12,7 @@
         <div class="list-section-wrapper">
           <div class="list-section">
             <div class="list-wrapper" v-for="list in board.lists"
-                 :key="list.pos">
+                 :key="list.pos" :data-list-id="list.id">
               <list :data="list"/>
             </div>
             <div class="list-wrapper">
@@ -119,7 +119,7 @@
 
         this.listDragger.on('drop', (el, wrapper, target, siblings) => {
           const targetList = {
-            id: Number(el.children[0].dataset.listId),
+            id: Number(el.dataset.listId),
             pos: 65535,
           };
 
