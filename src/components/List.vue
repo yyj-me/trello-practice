@@ -11,6 +11,7 @@
         @keyup.enter="onSubmitTitle"
       >
       <div v-else class="list-header-title" @click="onClickTitle">{{data.title}}</div>
+      <a class="delete-list-btn" href="" @click.prevent="onDeleteList">&times;</a>
     </div>
     <div class="card-list">
       <card-item v-for="card in data.cards" :key="card.id" :card="card"/>
@@ -48,6 +49,7 @@ export default {
   methods: {
     ...mapActions([
       'UPDATE_LIST',
+      'DELETE_LIST',
     ]),
     showAddCard() {
       this.isAddCard = true;
@@ -76,6 +78,11 @@ export default {
       if(title === this.data.title) return;
 
       this.UPDATE_LIST({id, title});
+    },
+    onDeleteList() {
+      if (!confirm(`Delete ${this.data.title} list?`)) return;
+
+      this.DELETE_LIST({id: this.data.id});
     },
   },
 }

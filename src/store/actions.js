@@ -37,6 +37,10 @@ const actions = {
     return List.update(id, {title, pos})
       .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
   },
+  DELETE_LIST({dispatch, state}, {id}) {
+    return List.destroy(id)
+      .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}));
+  },
   FETCH_CARD({commit}, {id}) {
     return Card.fetch(id)
       .then(data => {
