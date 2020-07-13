@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :data-list-pos="data.pos" :data-list-id="data.id">
     <div class="list-header">
       <input
         v-if="isEditTitle"

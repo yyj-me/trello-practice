@@ -11,7 +11,8 @@
         </div>
         <div class="list-section-wrapper">
           <div class="list-section">
-            <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
+            <div class="list-wrapper" v-for="list in board.lists"
+                 :key="list.pos">
               <list :data="list"/>
             </div>
             <div class="list-wrapper">
@@ -41,6 +42,7 @@
         bid: 0,
         loading: false,
         cDragger: null,
+        listDragger: null,
         isEditTitle: false,
         inputTitle: '',
       };
@@ -61,12 +63,14 @@
     },
     updated() {
       this.setCardDraggable();
+      this.setListDraggable();
     },
     methods: {
       ...mapActions([
         'FETCH_BOARD',
         'UPDATE_BOARD',
         'UPDATE_CARD',
+        'UPDATE_LIST',
       ]),
       ...mapMutations([
         'SET_THEME',
@@ -102,6 +106,41 @@
             targetCard.pos = (prev.pos + next.pos) / 2;
           }
           this.UPDATE_CARD(targetCard);
+        });
+      },
+      setListDraggable() {
+        if (this.listDragger) this.listDragger.destroy();
+
+        const options = {
+          invalid: (el, handle) => !/^list/.test(handle.className),
+        };
+
+        this.listDragger = dragger.init(Array.from(this.$el.querySelectorAll('.list-section')), options);
+
+        this.listDragger.on('drop', (el, wrapper, target, siblings) => {
+          const targetList = {
+            id: Number(el.children[0].dataset.listId),
+            pos: 65535,
+          };
+
+          const {prev, next} = dragger.siblings({
+            el,
+            wrapper,
+            candidates: Array.from(this.$el.querySelectorAll('.list')),
+            type: 'list',
+          });
+
+          console.log('prev : ', prev);
+          console.log('next : ', next);
+
+          if (!prev && next) {
+            targetList.pos = next.pos / 2;
+          } else if (prev && !next) {
+            targetList.pos = prev.pos * 2;
+          } else if (prev && next) {
+            targetList.pos = (prev.pos + next.pos) / 2;
+          }
+          this.UPDATE_LIST(targetList);
         });
       },
       onShowSettings() {
